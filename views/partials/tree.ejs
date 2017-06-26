@@ -1,0 +1,325 @@
+<div class="tab-pane active" id="1">
+  <div id="graph-container"></div>
+</div>
+<script>
+  $(document).ready(function () {
+
+    //generate-random-grid
+
+    // LOGIC OF SIGMA JS
+    var i,
+      s,
+      N = 100,
+      E = 500,
+      filtered = {
+        nodes: [],
+        edges: []
+      },
+      // memory representation of graph, useful when resetting filtering
+      g = {
+        nodes: [],
+        edges: []
+      };
+
+
+    // sigma.renderers.def = sigma.renderers.canvas
+    // Instantiate sigma:
+    s = new sigma({
+      graph: g,
+      container: 'graph-container'
+    });
+
+    s.bind('overNode clickNode doubleClickNode rightClickNode', function (e) {
+
+      //console.log('adding class dismiss');
+    });
+
+    s.bind('outNode', function (e) {
+
+    });
+
+    // Initialize the dragNodes plugin:
+    var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
+
+    dragListener.bind('startdrag', function (event) {
+      console.log(event);
+    });
+    dragListener.bind('drag', function (event) {
+      console.log(event);
+    });
+    dragListener.bind('drop', function (event) {
+      console.log(event);
+    });
+    dragListener.bind('dragend', function (event) {
+      console.log(event);
+    });
+
+    /*  $('#graph-container').mousedown(function (event) {
+        switch (event.which) {
+          case 1:
+            //alert('Left Mouse button pressed.');
+            if (!$('#add-node').hasClass('dismiss')) {
+              $('#add-node').modal('show');
+            }
+            break;
+          case 2:
+            //alert('Middle Mouse button pressed.');
+            break;
+          case 3:
+            //alert('Right Mouse button pressed.');
+            break;
+          default:
+            alert('You have a strange Mouse!');
+        }
+      }); */
+    //s.refresh();
+    //updateContainerDimensions();
+    //window.dispatchEvent(new Event('resize'));
+
+    // MODAL LOGIC
+    $('#add-node').modal({
+      show: false
+    });
+
+    // LOGIC OF SELECTS
+    //
+    $('#strategies-select').show();
+    $('#cobit-policies-select').hide();
+
+    $('#goal-warning').show();
+    $('#strategy-warning').hide();
+
+    $("select").select2({
+      dropdownCssClass: 'dropdown-inverse'
+    });
+
+    $('#filter').on("change", function (e) {
+      //var cobit = <%- JSON.stringify(cobit) %>
+      //console.log(e.val);
+      filtered = {
+        nodes: [],
+        edges: []
+      }
+      filterItems(e.val);
+    });
+
+    $('#goal-objective-select').on('change', function () {
+      if (this.value === '0') {
+        $('#strategies-select').parent().show();
+        $('#cobit-policies-select').parent().hide();
+        $('#node-type').val('objective');
+        $('#goal-warning').show();
+        $('#strategy-warning').hide();
+        $('#strategies-select-label').show();
+        $('#cobit-policies-select-label').hide();
+
+      } else if (this.value === '1') {
+        $('#strategies-select').parent().hide();
+        $('#cobit-policies-select').parent().show();
+        $('#node-type').val('strategy');
+        $('#goal-warning').hide();
+        $('#strategy-warning').show();
+        $('#strategies-select-label').hide();
+        $('#cobit-policies-select-label').show();
+      }
+      $("select").select2({
+        dropdownCssClass: 'dropdown-inverse'
+      });
+    });
+
+    // INTERCEPT FORM SUBMIT
+
+    $("#submit-form").click(function () {
+      $("#add-node").submit();
+    });
+
+    function isNodeName(element) {
+      return element.name && element.name == 'name';
+    }
+
+    function isCategory(element) {
+      return element.name == 'cobit-policies-select';
+    }
+
+    function isObjective(element) {
+      return element.name == 'type' && element.value == 'objective';
+    }
+
+    function isStrategy(element) {
+      return element.name == 'type' && element.value == 'strategy';
+    }
+
+    function isStrategyNode(element) {
+      return element.nodeType == 'strategy';
+    }
+
+    function isTarget(element) {
+      return element.name == 'strategies-select';
+    }
+
+    // FILTERING
+    // query is in array with elements to filter
+    function filterItems(query) {
+
+      if (query.length == 0) {
+        filtered = JSON.parse(JSON.stringify(g));
+      }
+      // case of strategy nodes
+      query.forEach(function (element) {
+        filteredNodes = g.nodes.filter(function (el) {
+          return el.category.toLowerCase().indexOf(element.toLowerCase()) > -1;
+        });
+        if (filteredNodes.length > 0) {
+          filteredNodes.forEach(function (strategyNode) {
+            filtered.nodes.push(strategyNode);
+            // case of edges
+            // if the source_id and target_id are present in filtered.nodes, we
+            // add that edge to filtered.edges
+            var target_id = strategyNode.id;
+            var filteredEdges = g.edges.filter(function (edge) {
+              return edge.target == target_id;
+            });
+            if (filteredEdges.length > 0) {
+              // we must add the edge and the objective (if they are not already present ) to the array
+              filteredEdges.forEach(function (edge) {
+                filtered.edges.push(edge);
+                // case of objective nodes
+                // We grab the objective nodes
+                // of each added edge and we add them to the filtered.nodes
+                var source_id = edge.source;
+                // we search the node with this id and add it.
+                var objective_node = g.nodes.find(function (el) {
+                  return el.id == source_id;
+                });
+                filtered.nodes.push(objective_node);
+              });
+            }
+          });
+        }
+      });
+      s.graph.clear();
+      s.graph.read({
+        nodes: filtered.nodes,
+        edges: filtered.edges
+      });
+      s.refresh();
+      //      return fruits.filter(function (el) {
+      //        return el.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      //      });
+    }
+
+    $("#add-node").submit(function (e) {
+      e.preventDefault();
+      var form = $('#node').serializeArray();
+      // we add a node
+      console.log(form);
+      $('#add-node').modal('hide');
+      // IF it's a strategy, we add the node
+      var nodeType = 'objective';
+      var color = '#dd409a'; // Goal color
+      var name = form.find(isNodeName).value;
+      var category = ''; // When adding strategy, we need to save which is its parent category
+      if (form.find(isStrategy) != null) {
+        nodeType = 'strategy';
+        color = '#1f3592';
+        category = form.find(isCategory).value;
+      }
+      var genericId = name + Date.now()
+      var params = {
+        id: genericId,
+        label: name,
+        category: category,
+        nodeType: nodeType,
+        x: Math.random(),
+        y: Math.random(),
+        size: 2,
+        color: color
+      };
+      g.nodes.push(params);
+      s.graph.addNode(params);
+      if (form.find(isObjective) != null) {
+        // if is a objective we add an edge between the selected strategy
+        // and the new objective node
+        var target_id = form.find(isTarget).value;
+        var source_id = genericId;
+        params = {
+          id: 'e_' + genericId,
+          source: source_id,
+          target: target_id,
+          size: 2,
+          color: '#ccc'
+        };
+        g.edges.push(params);
+        s.graph.addEdge(params);
+      }
+      s.refresh();
+    });
+
+    //GENERATE RANDOM GRID
+    $("#generate-random-grid").click(function () {
+      // Generate a random graph:
+      for (i = 0; i < N; i++)
+        g.nodes.push({
+          id: 'n' + i,
+          label: 'Node ' + i,
+          x: Math.random(),
+          y: Math.random(),
+          size: Math.random(),
+          color: '#666'
+        });
+
+      for (i = 0; i < E; i++)
+        g.edges.push({
+          id: 'e' + i,
+          source: 'n' + (Math.random() * N | 0),
+          target: 'n' + (Math.random() * N | 0),
+          size: Math.random(),
+          color: '#ccc'
+        });
+      s.graph.read({
+        nodes: g.nodes,
+        edges: g.edges
+      });
+      s.refresh();
+    });
+    //DELETE GRID
+    $("#delete-grid").click(function () {
+      g.nodes = [];
+      g.edges = [];
+      s.graph.clear();
+      s.refresh();
+    });
+    // ADD NODE MODAL POPUP
+    $("#add-node-button").click(function () {
+      // we first update the strategies based in the strategies node
+      var strategies = g.nodes.filter(isStrategyNode);
+      if (strategies != null) {
+        $('#strategies-select').html('').select2({
+          dropdownCssClass: 'dropdown-inverse'
+        });
+        strategies.forEach(function (element) {
+          console.log(element);
+          var newOption = new Option(element.label, element.id, true, true);
+          $("#strategies-select").append(newOption).trigger('change');
+        });
+        // Select the option with a value of 'Objective'
+        //  $('#goal-objective-select').val('0').trigger('change');
+        $('#goal-objective-select').val('0').trigger('change.select2');
+
+        $('#strategies-select').parent().show();
+        $('#cobit-policies-select').parent().hide();
+        $('#node-type').val('objective');
+        $('#goal-warning').show();
+        $('#strategy-warning').hide();
+        $('#strategies-select-label').show();
+        $('#cobit-policies-select-label').hide();
+        $("select").select2({
+          dropdownCssClass: 'dropdown-inverse'
+        });
+      }
+
+      $('#add-node').modal('show');
+    });
+  });
+
+</script>

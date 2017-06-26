@@ -1,0 +1,148 @@
+<% include navbar %>
+  <h1>Grid Diagram</h1>
+  <button class="btn btn-hg btn-primary" id='add-node-button'>
+  Add Node
+</button>
+  <button class="btn btn-hg btn-primary" id='generate-random-grid'>
+  Generate Random Grid
+</button>
+  <button class="btn btn-hg btn-danger" id='delete-grid'>
+  Delete Current Grid
+</button>
+  </br>
+  </br>
+  Filter:
+  <select multiple="multiple" class="form-control multiselect multiselect-info" id="filter"> 
+                
+            <optgroup label="Monitor, Evaluate and Assess">
+            <option value="MEA01 Monitor, Evaluate and Assess Performance and Conformance">MEA01 Monitor, Evaluate and Assess Performance and Conformance</option>
+            <option value="MEA02 Monitor, Evaluate and Assess the System of Internal Control">MEA02 Monitor, Evaluate and Assess the System of Internal Control</option>
+            <option value="MEA03 Monitor, Evaluate and Assess Compliance with External Requirements">MEA03 Monitor, Evaluate and Assess Compliance with External Requirements</option>
+            </optgroup>
+            <optgroup label="Process for Management of Enterprise IT">
+            <option value="Align, Plan and Organise">Align, Plan and Organise</option>
+            <option value="Build, Acquire and Implement">Build, Acquire and Implement</option>
+            <option value="Deliver, Service and Support">Deliver, Service and Support</option>
+            <option value="Monitor, Evaluate and Assess">Monitor, Evaluate and Assess</option>
+            </optgroup>
+            <optgroup label="Processes for Governance of Enterprise IT">
+            <option value="Evaluate, Direct and Monitor">Evaluate, Direct and Monitor</option>
+            <option value="Process for Management of Enterprise IT">Process for Management of Enterprise IT</option>
+            </optgroup>
+            <optgroup label="Evaluate, Direct and Monitor">
+            <option value="EDM01: Ensure Governance Framework Settling and Maintenance">EDM01: Ensure Governance Framework Settling and Maintenance</option>
+            <option value="EDM02: Ensure Benefits Delivery">EDM02: Ensure Benefits Delivery</option>
+            <option value="EDM03: Ensure Risk Optimization">EDM03: Ensure Risk Optimization</option>
+            <option value="EDM04: Ensure Resource Optimization">EDM04: Ensure Resource Optimization</option>
+            <option value="EDM05: Ensure Stakeholder Transparency">EDM05: Ensure Stakeholder Transparency</option>
+            </optgroup>
+            <optgroup label="Build, Acquire and Implement">
+            <option value="BAI01 Manage Programmes and Projects">BAI01 Manage Programmes and Projects</option>
+            <option value="BAI02 Manage Requirements Definition">BAI02 Manage Requirements Definition</option>
+            <option value="BAI03 Manage Solutions Identification and Build">BAI03 Manage Solutions Identification and Build</option>
+            <option value="BAI04 Manage Availability and Capacity">BAI04 Manage Availability and Capacity</option>
+            <option value="BAI05 Manage Organizational Change Enablement">BAI05 Manage Organizational Change Enablement</option>
+            <option value="BAI06 Manage Changes">BAI06 Manage Changes</option>
+            <option value="BAI07 Manage Chance Acceptance and Transitioning">BAI07 Manage Chance Acceptance and Transitioning</option>
+            <option value="BAI08 Manage Knowledge">BAI08 Manage Knowledge</option>
+            <option value="BAI09 Manage Assets">BAI09 Manage Assets</option>
+            <option value="BAI010 Manage Configuration">BAI010 Manage Configuration</option>
+            </optgroup>
+          </select>
+  <div class="modal fade" tabindex="-1" role="dialog" id="add-node">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Add new node</h4>
+        </div>
+        <div class="modal-body">
+          <p>Please select the type of node you're adding:</p>
+          <h5 id="goal-warning"><span class="label label-warning">Objective:</span>&nbsp;If you are going to add an objective, you need at least
+            to relate one strategy to it!</h5>
+          <h5 id="strategy-warning"><span class="label label-warning">Strategy:</span>&nbsp;If you are going to add a strategy, you need at least to
+            relate one COBIT process to it!</h5>
+          </br>
+          <!-- Goal/Objective Select  -->
+          <form id="node" method="post">
+            <div class="form-group">
+              <label for="name">Node Name</label>
+              <input type="text" placeholder="Name of:" id="name" name="name" class="form-control" />
+            </div>
+            <div class="form-group">
+              <input type="hidden" id="node-type" name="type" value="objective">
+            </div>
+            <div class="form-group">
+              <label for="goal-objective-select">Node Type</label>
+              <select class="form-control select select-primary select-block mbl" id="goal-objective-select" name="goal-objective-select"> 
+            <option value="0">Objective</option>
+            <option value="1">Strategy</option>
+          </select>
+            </div>
+
+            <!-- Close  Goal/Objective Select  -->
+            <!-- Strategies Select  -->
+            <div class="form-group">
+              <label for="strategies-select" id="strategies-select-label">Strategies</label>
+              <select class="form-control select select-primary select-block mbl" id="strategies-select" name="strategies-select"> 
+  
+          </select>
+            </div>
+            <!-- Close  Strategies Select  -->
+            <!-- COBIT POLICIES Select  -->
+            <div class="form-group">
+              <label for="cobit-policies-select" id="cobit-policies-select-label">Cobit Policies</label>
+              <select class="form-control select select-primary select-block mbl" id="cobit-policies-select" name="cobit-policies-select"> 
+                
+            <optgroup label="Monitor, Evaluate and Assess">
+            <option value="MEA01 Monitor, Evaluate and Assess Performance and Conformance">MEA01 Monitor, Evaluate and Assess Performance and Conformance</option>
+            <option value="MEA02 Monitor, Evaluate and Assess the System of Internal Control">MEA02 Monitor, Evaluate and Assess the System of Internal Control</option>
+            <option value="MEA03 Monitor, Evaluate and Assess Compliance with External Requirements">MEA03 Monitor, Evaluate and Assess Compliance with External Requirements</option>
+            </optgroup>
+            <optgroup label="Process for Management of Enterprise IT">
+            <option value="Align, Plan and Organise">Align, Plan and Organise</option>
+            <option value="Build, Acquire and Implement">Build, Acquire and Implement</option>
+            <option value="Deliver, Service and Support">Deliver, Service and Support</option>
+            <option value="Monitor, Evaluate and Assess">Monitor, Evaluate and Assess</option>
+            </optgroup>
+            <optgroup label="Processes for Governance of Enterprise IT">
+            <option value="Evaluate, Direct and Monitor">Evaluate, Direct and Monitor</option>
+            <option value="Process for Management of Enterprise IT">Process for Management of Enterprise IT</option>
+            </optgroup>
+            <optgroup label="Evaluate, Direct and Monitor">
+            <option value="EDM01: Ensure Governance Framework Settling and Maintenance">EDM01: Ensure Governance Framework Settling and Maintenance</option>
+            <option value="EDM02: Ensure Benefits Delivery">EDM02: Ensure Benefits Delivery</option>
+            <option value="EDM03: Ensure Risk Optimization">EDM03: Ensure Risk Optimization</option>
+            <option value="EDM04: Ensure Resource Optimization">EDM04: Ensure Resource Optimization</option>
+            <option value="EDM05: Ensure Stakeholder Transparency">EDM05: Ensure Stakeholder Transparency</option>
+            </optgroup>
+            <optgroup label="Build, Acquire and Implement">
+            <option value="BAI01 Manage Programmes and Projects">BAI01 Manage Programmes and Projects</option>
+            <option value="BAI02 Manage Requirements Definition">BAI02 Manage Requirements Definition</option>
+            <option value="BAI03 Manage Solutions Identification and Build">BAI03 Manage Solutions Identification and Build</option>
+            <option value="BAI04 Manage Availability and Capacity">BAI04 Manage Availability and Capacity</option>
+            <option value="BAI05 Manage Organizational Change Enablement">BAI05 Manage Organizational Change Enablement</option>
+            <option value="BAI06 Manage Changes">BAI06 Manage Changes</option>
+            <option value="BAI07 Manage Chance Acceptance and Transitioning">BAI07 Manage Chance Acceptance and Transitioning</option>
+            <option value="BAI08 Manage Knowledge">BAI08 Manage Knowledge</option>
+            <option value="BAI09 Manage Assets">BAI09 Manage Assets</option>
+            <option value="BAI010 Manage Configuration">BAI010 Manage Configuration</option>
+            </optgroup>
+          </select>
+            </div>
+            <!-- Close  COBIT POLICIES Select  -->
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="submit-form">Add Node</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  <% include partials/tree %>
+    <% include footer %>

@@ -1,0 +1,14 @@
+{
+  "name": "grid-sigma",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "flat-ui": "^2.3.0",
+    "bootstrap": "^3.3.7",
+    "d3": "v3.5.17"
+  }
+}
