@@ -70,6 +70,11 @@
               <input type="text" placeholder="Name of:" id="name" name="name" class="form-control" />
             </div>
             <div class="form-group">
+              <label for="description">Node Description</label>
+              <textarea name="description" placeholder="Description of strategy or the goal:" name="description" class="form-control" id="description"></textarea>
+            </div>
+
+            <div class="form-group">
               <input type="hidden" id="node-type" name="type" value="objective">
             </div>
             <div class="form-group">
@@ -81,12 +86,17 @@
             </div>
 
             <!-- Close  Goal/Objective Select  -->
+            <!-- Node percentage, only show if it is an strategy -->
+            <div class="form-group" id="percentage-form-group">
+              <label for="percentage">Strategy completition percentage (From 0% to 100%)</label>
+              <input type="number" name="percentage" min="1" max="100" id="percentage" class="form-control"/> 
+            </div>
             <!-- Strategies Select  -->
             <div class="form-group">
               <label for="strategies-select" id="strategies-select-label">Strategies</label>
               <select class="form-control select select-primary select-block mbl" id="strategies-select" name="strategies-select"> 
-  
-          </select>
+                
+              </select>
             </div>
             <!-- Close  Strategies Select  -->
             <!-- COBIT POLICIES Select  -->
@@ -137,6 +147,52 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" id="submit-form">Add Node</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="detail-node">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Node Details</h4>
+          <div id='node-type'><h5></h5></div>
+        </div>
+        <div class="modal-body">
+         <h5>Node's name:</h5>
+         <br/>
+         <div id='node-name'></div>
+         <hr>
+        <h5>Node's description</h5>
+        <br/>
+        <div id='node-description'></div>
+        
+        <div id='strategy-section'>
+          <hr>
+          <h5>
+            Category
+          </h5> 
+          <br/>
+          <div id='category-detail-modal'>
+
+          </div>
+          <hr>
+          <h5>
+            Percentage
+          </h5> 
+          <br/>
+          <div id='percentage-detail-modal'>
+
+          </div>
+        </div> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="treemap-form-button">Show strategy node in treemap</button>
         </div>
       </div>
       <!-- /.modal-content -->

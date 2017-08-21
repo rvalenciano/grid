@@ -1,0 +1,13 @@
+<% include navbar %>
+    <% if (users && users.length > 0) { %>
+        <h3> Here are the current users </h3>
+        <ul>
+            <% users.forEach(function(user){ %>
+                <li>
+                    <%= user.username %>
+                </li>
+            <% }) %>
+        </ul>
+        <% } else { %>
+           <h3>No users</h3>
+        <% } %>
