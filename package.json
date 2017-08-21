@@ -17,16 +17,17 @@
     "ejs": "^2.3.1",
     "express": "^4.13.3",
     "morgan": "^1.6.1",
+    "neo4j": "^1.1.1",
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "debug": "^2.2.0",
     "gulp": "^3.9.0",
-    "gulp-ruby-sass": "^2.0.1",
-    "gulp-nodemon": "^2.0.2",
     "gulp-livereload": "^3.8.0",
+    "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
+    "gulp-ruby-sass": "^2.1.1",
     "mocha": "^3.0.2",
     "nyc": "^10.0.0",
     "supertest": "^2.0.0"
