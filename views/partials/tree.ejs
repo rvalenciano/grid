@@ -154,6 +154,11 @@
       $("#add-node").submit();
     });
 
+    $("#treemap-form-button").click(function () {
+      // close modal
+      $("#node-detail").submit();
+    });
+
     function isNodeName(element) {
       return element.name && element.name == 'name';
     }
@@ -188,14 +193,19 @@
 
     function showDetailModal(node) {
       $('#node-name').text(node.label);
+      $('#node-detail-name').val(node.label);
       $('#node-description').text(node.description);
+      $('#node-detail-description').val(node.description);
       $('#node-type h5').text('Objective');
       if (node.nodeType === 'strategy') {
         $('#strategy-section').show();
         $('#node-type h5').text('Strategy');
         $('#category-detail-modal').text(node.category);
+        $('#node-detail-category').val(node.category);
         $('#percentage-detail-modal').text(node.percentage);
+        $('#node-detail-percentage').val(node.percentage);
         $('#treemap-form-button').show();
+        
       } else {
         $('#strategy-section').hide();
         $('#treemap-form-button').hide();
@@ -254,6 +264,7 @@
       //        return el.toLowerCase().indexOf(query.toLowerCase()) > -1;
       //      });
     }
+
 
     $("#add-node").submit(function (e) {
       e.preventDefault();
@@ -386,6 +397,7 @@
       $('#add-node').modal('show');
       $('#detail-node').modal('hide');
     });
+
   });
 
 </script>

@@ -31,8 +31,10 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/grid', grid);
 app.use('/', grid);
 app.use('/treemap', treemap);
+//json for cobit data
 app.use('/cobit', cobit);
 app.use('/info', info);
 //app.use('/users', users);

@@ -28,12 +28,5 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/grid', function (req, res) {
-  var cobit = getConfig('config/cobit.json');
-  res.render('grid', {
-    cobit: cobit,
-    title: 'Grid'
-  });
-});
 
 module.exports = router;

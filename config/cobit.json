@@ -1,204 +1,213 @@
 {
   "name": "Processes for Governance of Enterprise IT",
-  "children": [{
+  "rate": 0.03,
+  "children": [
+    {
       "name": "Evaluate, Direct and Monitor",
-      "children": [{
+      "rate": -0.01,
+      "children": [
+        {
           "name": "EDM01: Ensure Governance Framework Settling and Maintenance",
-          "value": 3938,
-          "url": "http://polisci.osu.edu"
+          "rate": 0.02
         },
         {
           "name": "EDM02: Ensure Benefits Delivery",
-          "value": 3938,
-          "url": "http://polisci.osu.edu"
+          "rate": -2.92
         },
         {
           "name": "EDM03: Ensure Risk Optimization",
-          "value": 3938,
-          "url": "http://polisci.osu.edu"
+          "rate": -0.07
         },
         {
           "name": "EDM04: Ensure Resource Optimization",
-          "value": 3938,
-          "url": "http://polisci.osu.edu"
+          "rate": -0.02
         },
         {
           "name": "EDM05: Ensure Stakeholder Transparency",
-          "value": 3938,
-          "url": "http://polisci.osu.edu"
+          "rate": -0.05
         }
       ]
     },
     {
       "name": "Process for Management of Enterprise IT",
-      "children": [{
+      "rate": -0.05,
+      "children": [
+        {
           "name": "Align, Plan and Organise",
-          "children": [{
+          "rate": 0.05,
+          "children": [
+            {
               "name": "APO01 Manage the IT Management Framework",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO02 Manage Strategy",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.06,
+              "value": 7.6
             },
             {
               "name": "APO03 Manage Enterprise Architecture",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.07,
+              "value": 7.6
             },
             {
               "name": "APO04 Manage Innovation",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.05,
+              "value": 7.6
             },
             {
               "name": "APO05 Manage Portfolio",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.05,
+              "value": 7.6
             },
             {
               "name": "APO06 Manage Budget and Costs",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO07 Manage Human Resources",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO08 Manage Relationships",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO09 Manage Service Agreements",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO10 Manage Suppliers",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO11 Manage Quality",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO12 Manage Risk",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             },
             {
               "name": "APO13 Manage Security",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 7.6
             }
           ]
         },
         {
           "name": "Build, Acquire and Implement",
-          "children": [{
+          "rate": 0.02,
+          "children": [
+            {
               "name": "BAI01 Manage Programmes and Projects",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI02 Manage Requirements Definition",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI03 Manage Solutions Identification and Build",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI04 Manage Availability and Capacity",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI05 Manage Organizational Change Enablement",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI06 Manage Changes",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI07 Manage Chance Acceptance and Transitioning",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI08 Manage Knowledge",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI09 Manage Assets",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             },
             {
               "name": "BAI010 Manage Configuration",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 10
             }
           ]
         },
         {
           "name": "Deliver, Service and Support",
-          "children": [{
+          "rate": 0.05,
+          "children": [
+            {
               "name": "DSS01 Manage Operation",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.07,
+              "value": 6
             },
             {
               "name": "DSS02 Manage Service Requests and Incidents",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 6
             },
             {
               "name": "DSS03 Manage Problems",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.07,
+              "value": 6
             },
             {
               "name": "DSS04 Manage Continuity",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.05,
+              "value": 6
             },
             {
               "name": "DSS06 Manage Business Process Controls",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": -0.02,
+              "value": 6
             }
           ]
         },
         {
           "name": "Monitor, Evaluate and Assess",
-          "children": [{
+          "rate": 0.07,
+          "children": [
+            {
               "name": "MEA01 Monitor, Evaluate and Assess Performance and Conformance",
-              "value": 3938,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.05,
+              "value": 30
             },
             {
               "name": "MEA02 Monitor, Evaluate and Assess the System of Internal Control",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": -0.03,
+              "value": 30
             },
             {
               "name": "MEA03 Monitor, Evaluate and Assess Compliance with External Requirements",
-              "value": 743,
-              "url": "http://polisci.osu.edu"
+              "rate": 0.02,
+              "value": 30
             }
           ]
         }
