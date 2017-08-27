@@ -4,12 +4,25 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session      = require('express-session');
+
+var passport = require('passport');
+var flash = require('connect-flash');
 
 var grid = require('./routes/grid');
+var index = require('./routes/index');
 var treemap = require('./routes/treemap');
 var info = require('./routes/info');
 var cobit = require('./routes/cobit');
 var users = require('./routes/user');
+var profile = require('./routes/profile');
+var signup = require('./routes/signup');
+var login = require('./routes/login');
+var logout = require('./routes/logout');
+var user = require('./routes/user');
+
+require('./config/passport')(passport); // pass passport for configuration
+
 
 var app = express();
 
@@ -31,13 +44,24 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// required for passport
+app.use(session({ secret: 'yoursecret' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
 app.use('/grid', grid);
-app.use('/', grid);
+app.use('/', index);
 app.use('/treemap', treemap);
 //json for cobit data
 app.use('/cobit', cobit);
 app.use('/info', info);
-//app.use('/users', users);
+app.use('/login', login);
+app.use('/logout', logout);
+app.use('/signup', signup);
+app.use('/profile', profile);
+app.use('/user', user);
+
 
 
 /// catch 404 and forward to error handler

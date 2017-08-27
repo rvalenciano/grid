@@ -11,7 +11,15 @@
         <li><a id='grid' href="/grid">Tree</a></li>
         <li><a id='cobit' href="/treemap">COBIT</a></li>
         <li><a id='info' href="/info">Info</a></li>
+        <li><a id='profile' href="/profile">Profile</a></li>
       </ul>
+      <div class="navbar-form navbar-right">
+        Welcome,
+        <%= user.properties.username || user.properties.localEmail%>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+      </div>
+
+
     </div>
     <!-- /.navbar-collapse -->
   </nav>

@@ -20,5 +20,8 @@ sudo apt-get install neo4j -y
 service neo4j status
 # to accept connections from host
 sudo echo "dbms.connectors.default_listen_address=0.0.0.0" >> /etc/neo4j/neo4j.conf
+sudo echo "dbms.connector.bolt.address=0.0.0.0:7687" >> /etc/neo4j/neo4j.conf
+
 sudo service neo4j restart
 vagrant ssh -c 'curl localhost:7474'
+vagrant ssh -c 'curl -H "Content-Type: application/json" -XPOST -d \'{"password":"grid2017"}\' -u neo4j:neo4j http://localhost:7474/user/neo4j/password'
