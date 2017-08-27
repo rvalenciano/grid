@@ -26,17 +26,32 @@
     // Instantiate sigma:
     s = new sigma({
       graph: g,
-      container: 'graph-container'
+      renderer: {
+        container: document.getElementById('graph-container'),
+        type: 'canvas'
+      },
+      settings: {
+        doubleClickEnabled: false,
+        minEdgeSize: 0.5,
+        maxEdgeSize: 4,
+        enableEdgeHovering: true,
+        edgeHoverColor: 'edge',
+        defaultEdgeHoverColor: '#000',
+        edgeHoverSizeRatio: 1,
+        edgeHoverExtremities: true,
+      }
+    }
+    );
+
+    //s.bind('doubleClickStage', function (e) {
+    // console.log(e.data);
+    // console.log('adding class dismiss');
+    //});
+    s.bind('doubleClickNode rightClickNode', function (e) {
+      //console.log(e.data.node);
+      showDetailModal(e.data.node);
     });
 
-    s.bind('overNode clickNode doubleClickNode rightClickNode', function (e) {
-
-      //console.log('adding class dismiss');
-    });
-
-    s.bind('outNode', function (e) {
-
-    });
 
     // Initialize the dragNodes plugin:
     var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
@@ -81,6 +96,10 @@
       show: false
     });
 
+    $('#detail-node').modal({
+      show: false
+    });
+
     // LOGIC OF SELECTS
     //
     $('#strategies-select').show();
@@ -111,6 +130,7 @@
         $('#goal-warning').show();
         $('#strategy-warning').hide();
         $('#strategies-select-label').show();
+        $('#percentage-form-group').hide();
         $('#cobit-policies-select-label').hide();
 
       } else if (this.value === '1') {
@@ -120,6 +140,7 @@
         $('#goal-warning').hide();
         $('#strategy-warning').show();
         $('#strategies-select-label').hide();
+        $('#percentage-form-group').show();
         $('#cobit-policies-select-label').show();
       }
       $("select").select2({
@@ -133,8 +154,21 @@
       $("#add-node").submit();
     });
 
+    $("#treemap-form-button").click(function () {
+      // close modal
+      $("#node-detail").submit();
+    });
+
     function isNodeName(element) {
       return element.name && element.name == 'name';
+    }
+
+    function isNodeDesc(element) {
+      return element.name && element.name == 'description';
+    }
+
+    function isNodePercentage(element) {
+      return element.name && element.name == 'percentage';
     }
 
     function isCategory(element) {
@@ -155,6 +189,29 @@
 
     function isTarget(element) {
       return element.name == 'strategies-select';
+    }
+
+    function showDetailModal(node) {
+      $('#node-name').text(node.label);
+      $('#node-detail-name').val(node.label);
+      $('#node-description').text(node.description);
+      $('#node-detail-description').val(node.description);
+      $('#node-type h5').text('Objective');
+      if (node.nodeType === 'strategy') {
+        $('#strategy-section').show();
+        $('#node-type h5').text('Strategy');
+        $('#category-detail-modal').text(node.category);
+        $('#node-detail-category').val(node.category);
+        $('#percentage-detail-modal').text(node.percentage);
+        $('#node-detail-percentage').val(node.percentage);
+        $('#treemap-form-button').show();
+        
+      } else {
+        $('#strategy-section').hide();
+        $('#treemap-form-button').hide();
+      }
+      $('#add-node').modal('hide');
+      $('#detail-node').modal('show');
     }
 
     // FILTERING
@@ -208,33 +265,51 @@
       //      });
     }
 
+
     $("#add-node").submit(function (e) {
       e.preventDefault();
       var form = $('#node').serializeArray();
       // we add a node
       console.log(form);
+      $('#detail-node').modal('hide');
       $('#add-node').modal('hide');
       // IF it's a strategy, we add the node
       var nodeType = 'objective';
       var color = '#dd409a'; // Goal color
       var name = form.find(isNodeName).value;
+      var desc = form.find(isNodeDesc).value;
+      var percentage = form.find(isNodePercentage).value || '0';
       var category = ''; // When adding strategy, we need to save which is its parent category
+      var size = 6;
       if (form.find(isStrategy) != null) {
         nodeType = 'strategy';
         color = '#1f3592';
         category = form.find(isCategory).value;
+        size = 4;
       }
-      var genericId = name + Date.now()
+      var genericId = name + Date.now();
+      var x = (Math.random() * 1) + 1;
+      var y = (Math.random() * 1) + 1;
       var params = {
         id: genericId,
         label: name,
         category: category,
         nodeType: nodeType,
-        x: Math.random(),
-        y: Math.random(),
-        size: 2,
+        description: desc,
+        percentage: percentage,
+        x: x,
+        y: y,
+        size: size,
         color: color
       };
+      var c = s.camera;
+      // Zoom out - single frame :
+      c.goTo({
+        ratio: c.ratio * c.settings('zoomingRatio')
+      });
+      //x = Math.random();
+      //y = Math.random();
+
       g.nodes.push(params);
       s.graph.addNode(params);
       if (form.find(isObjective) != null) {
@@ -312,6 +387,7 @@
         $('#goal-warning').show();
         $('#strategy-warning').hide();
         $('#strategies-select-label').show();
+        $('#percentage-form-group').hide();
         $('#cobit-policies-select-label').hide();
         $("select").select2({
           dropdownCssClass: 'dropdown-inverse'
@@ -319,7 +395,9 @@
       }
 
       $('#add-node').modal('show');
+      $('#detail-node').modal('hide');
     });
+
   });
 
 </script>

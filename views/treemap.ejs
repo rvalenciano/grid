@@ -1,4 +1,25 @@
 <% include navbar %>
   <h1>Cobit</h1>
+  <% if (name) { %>
+  <hr>
+  <h5>Strategy node name: </h5> <%= name %>
+  <% } %>
+    <% if (description) { %>
+  <hr>
+  <h5>Strategy node description: </h5> <%= description %>
+  <% } %>
+
+  <% if (percentage) { %>
+  <hr>
+  <h5>Strategy node percentage: </h5> <%= percentage %> %
+  <% } %>
+
+  <% if (category) { %>
+  <hr>
+  <h5>Node cobit's category: </h5> <%= category %> 
+  <% } %>
+
+  </br>
+  </br>
   <% include partials/cobit %>
     <% include footer %>

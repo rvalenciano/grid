@@ -8,20 +8,18 @@
     </div>
     <div class="collapse navbar-collapse" id="navbar-collapse-01">
       <ul class="nav navbar-nav">
-        <li><a href="/grid">Tree</a></li>
-        <li><a href="/treemap">COBIT</a></li>
-        <li><a href="/info">Info</a></li>
+        <li><a id='grid' href="/grid">Tree</a></li>
+        <li><a id='cobit' href="/treemap">COBIT</a></li>
+        <li><a id='info' href="/info">Info</a></li>
+        <li><a id='profile' href="/profile">Profile</a></li>
       </ul>
-      <form class="navbar-form navbar-right" action="#" role="search">
-        <div class="form-group">
-          <div class="input-group">
-            <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
-            <span class="input-group-btn">
-            <button type="submit" class="btn"><span class="fui-search"></span></button>
-            </span>
-          </div>
-        </div>
-      </form>
+      <div class="navbar-form navbar-right">
+        Welcome,
+        <%= user.properties.username || user.properties.localEmail%>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+      </div>
+
+
     </div>
     <!-- /.navbar-collapse -->
   </nav>

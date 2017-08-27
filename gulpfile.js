@@ -14,6 +14,10 @@ gulp.task('watch', function() {
   gulp.watch('./public/css/*.scss', ['sass']);
 });
 
+gulp.task('set-neo4j-url', function() {
+    return process.env.NEO4J_URL = 'http://neo4j:grid2017@localhost:7474';
+});
+
 gulp.task('develop', function () {
   livereload.listen();
   nodemon({
@@ -32,6 +36,7 @@ gulp.task('develop', function () {
 });
 
 gulp.task('default', [
+  'set-neo4j-url',
   'sass',
   'develop',
   'watch'

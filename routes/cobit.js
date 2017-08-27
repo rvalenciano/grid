@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var fs = require("fs"),
+
   json;
 var appRoot = require('app-root-path');
 
+var auth = require('./auth');
 
 function readJsonFileSync(filepath, encoding) {
   if (typeof (encoding) == 'undefined') {
@@ -18,13 +20,18 @@ function getConfig(file) {
   return readJsonFileSync(filepath);
 }
 
+
+
+
 /* GET COBIT json data. */
 
-router.get('/', function (req, res) {
+router.get('/', auth.isLoggedIn, function (req, res) {
   cobit = getConfig('config/cobit.json');
   res.json({
     cobit
   });
 });
+
+
 
 module.exports = router;
