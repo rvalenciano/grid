@@ -7,6 +7,8 @@
     //generate-random-grid
 
     // LOGIC OF SIGMA JS
+    var grid = <%- grid %>;
+    var grids = <%- grids %>;
     var i,
       s,
       N = 100,
@@ -15,12 +17,20 @@
         nodes: [],
         edges: []
       },
+
       // memory representation of graph, useful when resetting filtering
+      g = {};
+    if (grid.nodes && grid.edges) {
+      g = {
+        nodes: grid.nodes,
+        edges: grid.edges
+      };
+    } else {
       g = {
         nodes: [],
         edges: []
-      };
-
+      }
+    }
 
     // sigma.renderers.def = sigma.renderers.canvas
     // Instantiate sigma:
@@ -39,16 +49,13 @@
         defaultEdgeHoverColor: '#000',
         edgeHoverSizeRatio: 1,
         edgeHoverExtremities: true,
+        drawLabels: true
       }
-    }
-    );
+    }, function (s) {
+      s.startForceAtlas2({ worker: true, barnesHutOptimize: false });
+    });
 
-    //s.bind('doubleClickStage', function (e) {
-    // console.log(e.data);
-    // console.log('adding class dismiss');
-    //});
     s.bind('doubleClickNode rightClickNode', function (e) {
-      //console.log(e.data.node);
       showDetailModal(e.data.node);
     });
 
@@ -57,36 +64,36 @@
     var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
 
     dragListener.bind('startdrag', function (event) {
-      console.log(event);
+
     });
     dragListener.bind('drag', function (event) {
-      console.log(event);
+
     });
     dragListener.bind('drop', function (event) {
-      console.log(event);
+
     });
     dragListener.bind('dragend', function (event) {
-      console.log(event);
-    });
 
-    /*  $('#graph-container').mousedown(function (event) {
-        switch (event.which) {
-          case 1:
-            //alert('Left Mouse button pressed.');
-            if (!$('#add-node').hasClass('dismiss')) {
-              $('#add-node').modal('show');
-            }
-            break;
-          case 2:
-            //alert('Middle Mouse button pressed.');
-            break;
-          case 3:
-            //alert('Right Mouse button pressed.');
-            break;
-          default:
-            alert('You have a strange Mouse!');
-        }
-      }); */
+    });
+    /*
+         $('#graph-container').mousedown(function (event) {
+           switch (event.which) {
+             case 1:
+               //alert('Left Mouse button pressed.');
+               if (!$('#add-node').hasClass('dismiss')) {
+                 $('#add-node').modal('show');
+               }
+               break;
+             case 2:
+               //alert('Middle Mouse button pressed.');
+               break;
+             case 3:
+               //alert('Right Mouse button pressed.');
+               break;
+             default:
+               alert('You have a strange Mouse!');
+           }
+         }); */
     //s.refresh();
     //updateContainerDimensions();
     //window.dispatchEvent(new Event('resize'));
@@ -95,6 +102,8 @@
     $('#add-node').modal({
       show: false
     });
+
+    $('#saveAlert').hide();
 
     $('#detail-node').modal({
       show: false
@@ -156,7 +165,15 @@
 
     $("#treemap-form-button").click(function () {
       // close modal
-      $("#node-detail").submit();
+      //alert('here we save our current node');
+      $('#graph').remove();
+      $('<input>').attr({
+        type: 'hidden',
+        id: 'graph',
+        name: 'graph',
+        value: g
+      }).appendTo('#node-detail');
+      //$("#node-detail").submit();
     });
 
     function isNodeName(element) {
@@ -205,12 +222,14 @@
         $('#percentage-detail-modal').text(node.percentage);
         $('#node-detail-percentage').val(node.percentage);
         $('#treemap-form-button').show();
-        
+
       } else {
         $('#strategy-section').hide();
         $('#treemap-form-button').hide();
       }
       $('#add-node').modal('hide');
+      $('#save-grid').modal('hide');
+      $('#load-grid').modal('hide');
       $('#detail-node').modal('show');
     }
 
@@ -273,6 +292,8 @@
       console.log(form);
       $('#detail-node').modal('hide');
       $('#add-node').modal('hide');
+      $('#save-grid').modal('hide');
+      $('#load-grid').modal('hide');
       // IF it's a strategy, we add the node
       var nodeType = 'objective';
       var color = '#dd409a'; // Goal color
@@ -287,7 +308,7 @@
         category = form.find(isCategory).value;
         size = 4;
       }
-      var genericId = name + Date.now();
+      var genericId = 'node_' + Date.now();
       var x = (Math.random() * 1) + 1;
       var y = (Math.random() * 1) + 1;
       var params = {
@@ -313,19 +334,22 @@
       g.nodes.push(params);
       s.graph.addNode(params);
       if (form.find(isObjective) != null) {
-        // if is a objective we add an edge between the selected strategy
+        // if is a objective we add an edge between the selected strategies
         // and the new objective node
-        var target_id = form.find(isTarget).value;
-        var source_id = genericId;
-        params = {
-          id: 'e_' + genericId,
-          source: source_id,
-          target: target_id,
-          size: 2,
-          color: '#ccc'
-        };
-        g.edges.push(params);
-        s.graph.addEdge(params);
+        var target_ids = form.filter(isTarget).map((x) => x.value);
+        target_ids.forEach(function (target_id) {
+          var source_id = genericId;
+          params = {
+            id: 'e_' + source_id + '_' + target_id,
+            source: source_id,
+            target: target_id,
+            size: 2,
+            color: '#ccc'
+          };
+          g.edges.push(params);
+          s.graph.addEdge(params);
+        });
+
       }
       s.refresh();
     });
@@ -364,6 +388,72 @@
       s.graph.clear();
       s.refresh();
     });
+
+    // LOAD NODE MODA POPUP
+    // SAVE NODE MODAL POPUP
+    $("#load-grid-btn").click(function () {
+      grids.forEach(function (element) {
+        console.log(element);
+        var newOption = new Option(element.grid.properties.name, element.grid.properties.name, true, true);
+        $("#grids-select").append(newOption).trigger('change');
+      });
+      $('#add-node').modal('hide');
+      $('#detail-node').modal('hide');
+      $('#save-grid').modal('hide');
+      $('#load-grid').modal('show');
+    });
+
+
+    // SAVE NODE MODAL POPUP
+    $("#save-grid-btn").click(function () {
+      var nodes = 0;
+      var edges = 0;
+      var html = '<ul>';
+      if (grids.length > 0) {
+        grids.forEach(function (element) {
+          //nodes = element.grid.nodes ? element.grid.nodes.length : 0;
+          //edges = element.grid.edges ? element.grid.edges.length : 0;
+          html = html + '<li>' + element.grid.properties.name + '</li>';
+        });
+        html = html + '</ul>';
+      } else {
+        html = '<span>No grids saved yet for this user!</span>'
+      }
+      $('#savedGridsList').html(html);
+      $('#add-node').modal('hide');
+      $('#detail-node').modal('hide');
+      $('#save-grid').modal('show');
+      $('#load-grid').modal('hide');
+
+      /*     $.ajax({
+             type: 'POST',
+             url: '/grid',
+             data: { graph: g },
+             success: function (resultData) {
+               alert(resultData);
+             }
+           }); */
+    });
+
+    //SAVE GRID FORM BUTTON
+
+    $("#save-grid-form-btn").click(function () {
+      if (!$("#savedGridNameTextBox").val()) {
+        $('#saveAlert').show();
+      } else {
+        $('#saveAlert').hide();
+        $("#grid-form-input").val(JSON.stringify(g));
+        $("#save-graph-form").submit();
+      }
+
+    });
+
+
+    $("#load-grid-form-btn").click(function () {
+      $("#load-graph-form").submit();
+    });
+
+
     // ADD NODE MODAL POPUP
     $("#add-node-button").click(function () {
       // we first update the strategies based in the strategies node
@@ -396,6 +486,8 @@
 
       $('#add-node').modal('show');
       $('#detail-node').modal('hide');
+      $('#save-grid').modal('hide');
+      $('#load-grid').modal('hide');
     });
 
   });
