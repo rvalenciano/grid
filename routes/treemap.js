@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require("fs"),
   json;
 var appRoot = require('app-root-path');
+var auth = require('./auth');
 
 
 function readJsonFileSync(filepath, encoding) {
@@ -34,9 +35,10 @@ function find(array, name) {
 
 /* GET home page. */
 
-router.get('/', function (req, res) {
+router.get('/', auth.isLoggedIn, function (req, res) {
   res.render('treemap', {
     title: 'Cobit',
+    user: req.user,
     path: JSON.stringify([]),
     name: undefined,
     description: undefined,
@@ -45,15 +47,15 @@ router.get('/', function (req, res) {
   });
 });
 
-router.post('/', function (req, res) {
+router.post('/', auth.isLoggedIn, function (req, res) {
   cobit = getConfig('config/cobit.json');
   var path = [];
   // We push root
   path = find(cobit.children, req.body.category);
-  console.log(path);
   // Wwe build the path to show. The path will be an array.
   res.render('treemap', {
     title: 'Cobit',
+    user: req.user,
     path: JSON.stringify(path),
     name: req.body.name,
     description: req.body.description,

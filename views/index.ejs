@@ -1,1 +1,25 @@
+<% include header %>
+
+<div class="container">
+
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-lock"></span>Grid with Cobit version 0.0.1</h1>
+
+        <!-- show any messages that come back with authentication -->
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+
+        <p>Login or Register with:</p>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+    </div>
+
+    <div class="text-center">
+        <p>Grid uses a graph to visualize objectives and related strategies.</p>
+        <p>Currently, a treemap shows the COBIT structure, and you can build a related graph</p>
+        <p>Visit  <a href="http://google.com">this</a> for more relevant information.</p>
+    </div>
+
+</div>
 <% include footer %>

@@ -1,0 +1,44 @@
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <form action="/user/update" method="post">
+        <p>Edit your name:</p>
+        <input type="text" class="form-control" name="username" placeholder="<%= user.properties.username %>" required />
+        <button type="submit" class="btn btn-warning btn-lg">Update</button>
+
+    </form>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-md-10">
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Local</h3>
+
+                <% if (user.properties.localEmail) { %>
+                    <p>
+                        <strong>id</strong>:
+                        <%= user._id %><br>
+                            <strong>email</strong>:
+                            <%= user.properties.localEmail %><br>
+                            <% if (user.properties.username) { %> 
+                            <strong>Name</strong>:
+                             <%= user.properties.username %><br>
+                            <% } %>
+                            <strong>password</strong>:
+                            <%= user.properties.localPassword %>
+                    </p>
+
+                  <!--  <a href="/unlink/local" class="btn btn-default">Unlink</a> -->
+                <% } else { %>
+                  <!-- <a href="/connect/local" class="btn btn-default">Connect Local</a> -->
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+</div>
