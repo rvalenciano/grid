@@ -29,8 +29,7 @@
     "neo4j": "2.0.0-RC2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "serve-favicon": "^2.3.0",
-    "tank-browser": "^0.1.8"
+    "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
