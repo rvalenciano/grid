@@ -9,6 +9,12 @@ body {
   background-color: aliceblue;
 }
 
+#my-tank-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: aliceblue; }
+
 #chart {
   max-width: 100%;
   overflow:auto;
@@ -98,3 +104,4 @@ rect.parent,
 	padding:0px;
 	font-size:10px !important;
 }
+

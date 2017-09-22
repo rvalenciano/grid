@@ -38,6 +38,7 @@ function find(array, name) {
 router.get('/', auth.isLoggedIn, function (req, res) {
   res.render('treemap', {
     title: 'Cobit',
+    user: req.user,
     path: JSON.stringify([]),
     name: undefined,
     description: undefined,
@@ -51,10 +52,10 @@ router.post('/', auth.isLoggedIn, function (req, res) {
   var path = [];
   // We push root
   path = find(cobit.children, req.body.category);
-  console.log(path);
   // Wwe build the path to show. The path will be an array.
   res.render('treemap', {
     title: 'Cobit',
+    user: req.user,
     path: JSON.stringify(path),
     name: req.body.name,
     description: req.body.description,

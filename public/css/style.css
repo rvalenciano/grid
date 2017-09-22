@@ -5,6 +5,14 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
+  background-color: aliceblue;
+  overflow-y: auto;
+}
+
+#my-tank-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background-color: aliceblue; }
 
 #chart {
@@ -76,3 +84,13 @@ rect.parent,
   margin: 0 0 4px !important;
   padding: 0px;
   font-size: 10px !important; }
+
+
+.left-panel {
+  margin: 10px;
+}
+
+#main-container > div {
+  height: 1000px;
+}
+

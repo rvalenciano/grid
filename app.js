@@ -20,6 +20,7 @@ var signup = require('./routes/signup');
 var login = require('./routes/login');
 var logout = require('./routes/logout');
 var user = require('./routes/user');
+var admin = require('./routes/admin');
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -61,6 +62,7 @@ app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/profile', profile);
 app.use('/user', user);
+app.use('/admin', admin);
 
 
 
