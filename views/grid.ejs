@@ -13,7 +13,7 @@
         </div>
         <% } %>
 
-          <h5>Grid Diagram: <span>&nbsp;&nbsp;<%= name %></span></h5>
+          <h5>Grid Diagram:&nbsp;&nbsp;<span id="grid-name"><%= name %></span></h5>
           <button class="btn btn-hg btn-primary" id='add-node-button'>
   Add Node
 </button>
@@ -218,9 +218,15 @@
                     <input id="node-detail-category" name="category" type="hidden">
                     <input id="node-detail-percentage" name="percentage" type="hidden">
                   </form>
+
+                  <form id="delete-node" method="POST" action="/grid/destroy">
+                    <input id="node-label-input" name="nodeLabel" type="hidden">
+                    <input id="grid-name-input" name="gridsSelect" type="hidden">
+                  </form>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" id="treemap-delete-button">Delete node</button>
                   <button type="button" class="btn btn-primary" id="treemap-form-button">Show strategy node in treemap</button>
                 </div>
               </div>

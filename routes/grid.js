@@ -44,6 +44,35 @@ router.get('/', auth.isLoggedIn, function (req, res) {
 
 });
 
+router.post('/destroy', auth.isLoggedIn, function (req, res) {
+
+    console.log('IN DELETE');
+  var grids = [];
+  var cobit = getConfig('config/cobit.json');
+  var grid = JSON.stringify({ nodes: [], edges: [] });
+  var selectedHeaderNode = req.body.gridsSelect;
+
+
+
+  Grid.loadHeaderNodes(req.user._id, function (err, loadedGrids) {
+    Grid.deleteNode(req.body.nodeLabel,selectedHeaderNode, function (err, resultantGrid) {
+      console.log('resultantGrid', JSON.stringify(resultantGrid, null, 4));
+      res.render('grid', {
+        cobit: cobit,
+        user: req.user,
+        grid: JSON.stringify(resultantGrid),
+        grids: JSON.stringify(loadedGrids),
+        errors: '',
+        successes: '',
+        name: selectedHeaderNode,
+        title: 'Grid'
+      });
+    });
+
+  });
+
+});
+
 router.post('/load', auth.isLoggedIn, function (req, res) {
   var grids = [];
   var cobit = getConfig('config/cobit.json');
@@ -107,7 +136,7 @@ router.post('/', auth.isLoggedIn, function (req, res, next) {
 
   var cobit = getConfig('config/cobit.json');
   var existingGrid = req.body.grid;
-  var responseGrid = {nodes: [], edges: []};
+  var responseGrid = { nodes: [], edges: [] };
   var response = {};
 
 
@@ -161,7 +190,7 @@ router.post('/', auth.isLoggedIn, function (req, res, next) {
                 console.log('JSON.parse(existingGrid).edges', JSON.parse(existingGrid).edges);
                 //if(false) {
                 responseGrid.nodes = objNode.nodes;
-               if (JSON.parse(existingGrid).edges.length > 0) {
+                if (JSON.parse(existingGrid).edges.length > 0) {
                   Grid.createGraphEdges(JSON.parse(existingGrid), function (resultGraph) {
                     if (resultGraph.result) {
                       responseGrid.edges = resultGraph.edges;
@@ -181,7 +210,7 @@ router.post('/', auth.isLoggedIn, function (req, res, next) {
                   response.successes = 'Success saving graph nodes';
                   res.render('grid', response);
                 }
-                
+
               }
             });
 

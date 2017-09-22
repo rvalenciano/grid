@@ -68,11 +68,34 @@ Grid.loadGrid = function (gridName, callback) {
             gridName: gridName,
         }
     }
+    
     db.cypher(qp, function (err, results) {
         if (err) return callback(err);
         callback(null, results);
     });
 
+}
+
+Grid.deleteNode = function (nodeLabel, gridName, callback) {
+    var qp = {
+        query: [
+            'MATCH (grid:Grid),(node:Node)-[r]-() MATCH (grid)-[rel:has]->(node) WHERE grid.name = {gridName}',
+            'AND node.label = {nodeLabel}',
+            'DETACH DELETE node',
+            'RETURN grid, rel'
+        ].join('\n'),
+        params: {
+            nodeLabel: nodeLabel,
+            gridName: gridName
+        }
+    }
+
+    console.log(qp);
+    // MATCH (user:User),(grid:Grid) MATCH (user)-[rel:creates]->(grid) WHERE ID(user) = 2 RETURN grid 
+    db.cypher(qp, function (err, results) {
+        if (err) return callback(err);
+        callback(null, results);
+    });
 }
 
 Grid.loadHeaderNodes = function (userId, callback) {
@@ -157,9 +180,9 @@ Grid.createGraph = function (grid, headerNodeId, cb) {
             }
             db.cypher(qp, function (err, result) {
                 if (err) {
-                    
+
                     callback(err);
-                }                
+                }
                 callback();
             });
 
@@ -176,7 +199,7 @@ Grid.createGraph = function (grid, headerNodeId, cb) {
         } else {
             console.log('All nodes were created and related to the header node');
         }
-         cb(graphToReturn);
+        cb(graphToReturn);
     });
 
 };
@@ -209,13 +232,13 @@ Grid.createGraphEdges = function (grid, cb) {
             }
         }
         db.cypher(qp, function (err, result) {
-            
-            
+
+
             if (err) {
                 console.log('err in edges', err);
                 callback(err)
             }
-            
+
             //graphToReturn.edges.push();
             graphToReturn.edges.push(result[0].rel.properties);
             callback();

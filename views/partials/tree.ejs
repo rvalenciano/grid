@@ -163,6 +163,12 @@
       $("#add-node").submit();
     });
 
+    $('#treemap-delete-button').click(function () {
+      $('#node-label-input').val($('#node-name').text());
+      $('#grid-name-input').val($('#grid-name').text());
+      $("#delete-node").submit();
+    });
+
     $("#treemap-form-button").click(function () {
       // close modal
       //alert('here we save our current node');
