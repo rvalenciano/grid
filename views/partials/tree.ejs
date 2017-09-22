@@ -1,6 +1,5 @@
-<div class="tab-pane active" id="1">
-  <div id="graph-container"></div>
-</div>
+<div id="graph-container"></div>
+
 <script>
   $(document).ready(function () {
     var gridName = '<%= name %>';
@@ -15,7 +14,26 @@
     // LOGIC OF SIGMA JS
     var grid = <%- grid %>;
     var grids = <%- grids %>;
-    
+
+    var atlasSettings = {
+      forceAtlas2Time: 5000,
+      // Force atalas2 configuration
+      forceAtlas2: {
+        linLogMode: false,
+        outboundAttractionDistribution: false,
+        adjustSizes: false,
+        edgeWeightInfluence: 0,
+        scalingRatio: 1,
+        strongGravityMode: false,
+        gravity: 1,
+        slowDown: 1,
+        barnesHutOptimize: true,
+        barnesHutTheta: 0.5,
+        startingIterations: 1,
+        iterationsPerRender: 1
+      },
+    };
+
 
     var i,
       s,
@@ -74,27 +92,11 @@
 
       },
 
-      atlasSettings: {
-        forceAtlas2Time: 5000,
-        // Force atalas2 configuration
-        forceAtlas2: {
-          linLogMode: false,
-          outboundAttractionDistribution: false,
-          adjustSizes: false,
-          edgeWeightInfluence: 0,
-          scalingRatio: 1,
-          strongGravityMode: false,
-          gravity: 1,
-          slowDown: 1,
-          barnesHutOptimize: true,
-          barnesHutTheta: 0.5,
-          startingIterations: 1,
-          iterationsPerRender: 1
-        },
-      }
-    }, function (s) {
-      s.startForceAtlas2(atlasSettings.forceAtlas2);
+
     });
+
+
+
 
     s.bind('doubleClickNode rightClickNode', function (e) {
       showDetailModal(e.data.node);
@@ -135,7 +137,13 @@
                alert('You have a strange Mouse!');
            }
          }); */
-    //s.refresh();
+    var c = s.camera;
+    // Zoom out - single frame :
+    c.goTo({
+      ratio: c.ratio * c.settings('zoomingRatio')
+    });
+    s.refresh();
+   // s.startForceAtlas2(atlasSettings.forceAtlas2);
     //updateContainerDimensions();
     //window.dispatchEvent(new Event('resize'));
 
@@ -325,7 +333,12 @@
         nodes: filtered.nodes,
         edges: filtered.edges
       });
+
+
+
+
       s.refresh();
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
       //      return fruits.filter(function (el) {
       //        return el.toLowerCase().indexOf(query.toLowerCase()) > -1;
       //      });
@@ -400,7 +413,9 @@
         });
 
       }
+
       s.refresh();
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
     });
 
     //GENERATE RANDOM GRID
@@ -428,7 +443,9 @@
         nodes: g.nodes,
         edges: g.edges
       });
+
       s.refresh();
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
     });
     //DELETE GRID
     $("#delete-grid").click(function () {
@@ -436,7 +453,9 @@
       g.edges = [];
       localStorage.setItem('grid', JSON.stringify(g));
       s.graph.clear();
+
       s.refresh();
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
     });
 
     // LOAD NODE MODA POPUP
