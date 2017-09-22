@@ -216,10 +216,10 @@
       //$('#node-label-input').val($('#node-name').text());
       //$('#grid-name-input').val($('#grid-name').text());
       //$("#delete-node").submit();
-
+      g.edges = deleteEdges($('#node-name').text());
       g.nodes = deleteNode($('#node-name').text());
-      g.edges = deleteEdge($('#node-name').text());
       localStorage.setItem('grid', JSON.stringify(g));
+      s.graph.clear();
       s.graph.read({
         nodes: g.nodes,
         edges: g.edges
@@ -277,20 +277,25 @@
 
     function deleteNode(nodeToDeleteName) {
       return g.nodes.filter(function (el) {
-        return el.name != nodeToDeleteName;
+        return el.label != nodeToDeleteName;
       });
     }
 
     function deleteEdges(nodeToDeleteName) {
       /* First we search by the id of the node to delete name */
       var nodeId = '';
-      nodeId = g.nodes.filter(function (el) {
-        return el.name === nodeToDeleteName;
-      })[0].id;
+      var node = g.nodes.filter(function (el) {
+        return el.label === nodeToDeleteName;
+      })[0];
+      if (node) {
+        nodeId = node.id;
+        return g.edges.filter(function (edge) {
+          return edge.source != nodeId && edge.target != nodeId;
+        });
+      } else {
+        return g.edges;
+      }
 
-      return g.edges.filter(function (edge) {
-        return edge.source != nodeId && edge.target != nodeId;
-      });
     }
 
     function showDetailModal(node) {
