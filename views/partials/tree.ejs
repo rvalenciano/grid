@@ -143,7 +143,7 @@
       ratio: c.ratio * c.settings('zoomingRatio')
     });
     s.refresh();
-   // s.startForceAtlas2(atlasSettings.forceAtlas2);
+    // s.startForceAtlas2(atlasSettings.forceAtlas2);
     //updateContainerDimensions();
     //window.dispatchEvent(new Event('resize'));
 
@@ -213,9 +213,21 @@
     });
 
     $('#treemap-delete-button').click(function () {
-      $('#node-label-input').val($('#node-name').text());
-      $('#grid-name-input').val($('#grid-name').text());
-      $("#delete-node").submit();
+      //$('#node-label-input').val($('#node-name').text());
+      //$('#grid-name-input').val($('#grid-name').text());
+      //$("#delete-node").submit();
+      g.edges = deleteEdges($('#node-name').text());
+      g.nodes = deleteNode($('#node-name').text());
+      localStorage.setItem('grid', JSON.stringify(g));
+      s.graph.clear();
+      s.graph.read({
+        nodes: g.nodes,
+        edges: g.edges
+      });
+
+      s.refresh();
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
+
     });
 
     $("#treemap-form-button").click(function () {
@@ -261,6 +273,29 @@
 
     function isTarget(element) {
       return element.name == 'strategies-select';
+    }
+
+    function deleteNode(nodeToDeleteName) {
+      return g.nodes.filter(function (el) {
+        return el.label != nodeToDeleteName;
+      });
+    }
+
+    function deleteEdges(nodeToDeleteName) {
+      /* First we search by the id of the node to delete name */
+      var nodeId = '';
+      var node = g.nodes.filter(function (el) {
+        return el.label === nodeToDeleteName;
+      })[0];
+      if (node) {
+        nodeId = node.id;
+        return g.edges.filter(function (edge) {
+          return edge.source != nodeId && edge.target != nodeId;
+        });
+      } else {
+        return g.edges;
+      }
+
     }
 
     function showDetailModal(node) {
