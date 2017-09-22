@@ -1,6 +1,9 @@
 {
   "name": "grid-sigma",
   "version": "0.0.1",
+    "engines": {
+    "node": "6.11.2"
+  },
   "private": true,
   "main": "app.js",
   "scripts": {
