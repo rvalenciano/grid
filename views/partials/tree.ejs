@@ -3,12 +3,20 @@
 </div>
 <script>
   $(document).ready(function () {
-
+    var gridName = '<%= name %>';
+    if (gridName === 'Unsaved grid!' && localStorage.getItem('gridName')) {
+      gridName = localStorage.getItem('gridName');
+    } else {
+      localStorage.setItem('gridName', gridName);
+    }
+    $('#grid-name').text(gridName);
     //generate-random-grid
 
     // LOGIC OF SIGMA JS
     var grid = <%- grid %>;
     var grids = <%- grids %>;
+    
+
     var i,
       s,
       N = 100,
@@ -17,20 +25,29 @@
         nodes: [],
         edges: []
       },
-
-      // memory representation of graph, useful when resetting filtering
       g = {};
-    if (grid.nodes && grid.edges) {
+
+    // memory representation of graph, useful when resetting filtering
+
+    if (grid.nodes && grid.edges && grid.nodes.length > 0) {
       g = {
         nodes: grid.nodes,
         edges: grid.edges
       };
     } else {
-      g = {
-        nodes: [],
-        edges: []
+      g = JSON.parse(localStorage.getItem('grid'));
+      if (!g) {
+        g = {
+          nodes: [],
+          edges: []
+        }
       }
     }
+
+    /*
+     * We are gonna use local storage to store g and also all other variable
+    */
+    localStorage.setItem('grid', JSON.stringify(g));
 
     // sigma.renderers.def = sigma.renderers.canvas
     // Instantiate sigma:
@@ -42,17 +59,41 @@
       },
       settings: {
         doubleClickEnabled: false,
+        drawEdgeLabels: false,
         minEdgeSize: 0.5,
         maxEdgeSize: 4,
+        minNodeSize: 0,
+        maxNodeSize: 10,
         enableEdgeHovering: true,
         edgeHoverColor: 'edge',
         defaultEdgeHoverColor: '#000',
         edgeHoverSizeRatio: 1,
         edgeHoverExtremities: true,
-        drawLabels: true
+        drawLabels: true,
+        defaultEdgeType: 'tapered',
+
+      },
+
+      atlasSettings: {
+        forceAtlas2Time: 5000,
+        // Force atalas2 configuration
+        forceAtlas2: {
+          linLogMode: false,
+          outboundAttractionDistribution: false,
+          adjustSizes: false,
+          edgeWeightInfluence: 0,
+          scalingRatio: 1,
+          strongGravityMode: false,
+          gravity: 1,
+          slowDown: 1,
+          barnesHutOptimize: true,
+          barnesHutTheta: 0.5,
+          startingIterations: 1,
+          iterationsPerRender: 1
+        },
       }
     }, function (s) {
-      s.startForceAtlas2({ worker: true, barnesHutOptimize: false });
+      s.startForceAtlas2(atlasSettings.forceAtlas2);
     });
 
     s.bind('doubleClickNode rightClickNode', function (e) {
@@ -338,6 +379,7 @@
       //y = Math.random();
 
       g.nodes.push(params);
+      localStorage.setItem('grid', JSON.stringify(g));
       s.graph.addNode(params);
       if (form.find(isObjective) != null) {
         // if is a objective we add an edge between the selected strategies
@@ -353,6 +395,7 @@
             color: '#ccc'
           };
           g.edges.push(params);
+          localStorage.setItem('grid', JSON.stringify(g));
           s.graph.addEdge(params);
         });
 
@@ -391,6 +434,7 @@
     $("#delete-grid").click(function () {
       g.nodes = [];
       g.edges = [];
+      localStorage.setItem('grid', JSON.stringify(g));
       s.graph.clear();
       s.refresh();
     });

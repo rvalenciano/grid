@@ -37,7 +37,7 @@ router.get('/', auth.isLoggedIn, function (req, res) {
       grids: JSON.stringify(loadedGrids),
       errors: '',
       successes: '',
-      name: 'Unsaved grid!',
+      name: "Unsaved grid!",
       title: 'Grid'
     });
   });
