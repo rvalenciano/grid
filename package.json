@@ -30,16 +30,16 @@
     "neo4j": "2.0.0-RC2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "serve-favicon": "^2.3.0"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "debug": "^2.2.0",
+    "serve-favicon": "^2.3.0",
     "gulp": "^3.9.0",
     "gulp-livereload": "^3.8.0",
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
-    "gulp-ruby-sass": "^2.1.1",
+    "gulp-ruby-sass": "^2.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "debug": "^2.2.0",
     "mocha": "^3.0.2",
     "nyc": "^10.0.0",
     "supertest": "^2.0.0"
