@@ -5,10 +5,17 @@
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
+
+    <div class="alert alert-success alert-dismissible" role="alert" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong> Local storage cleaned.
+    </div>
+
     <form action="/user/update" method="post">
         <p>Edit your name:</p>
         <input type="text" class="form-control" name="username" placeholder="<%= user.properties.username %>" required />
         <button type="submit" class="btn btn-warning btn-lg">Update</button>
+        <button type="button" class="btn btn-primary" id="clear-local-storage">Clear local storage</button>
 
     </form>
 
@@ -25,20 +32,32 @@
                         <%= user._id %><br>
                             <strong>email</strong>:
                             <%= user.properties.localEmail %><br>
-                            <% if (user.properties.username) { %> 
-                            <strong>Name</strong>:
-                             <%= user.properties.username %><br>
-                            <% } %>
-                            <strong>password</strong>:
-                            <%= user.properties.localPassword %>
+                                <% if (user.properties.username) { %>
+                                    <strong>Name</strong>:
+                                    <%= user.properties.username %><br>
+                                        <% } %>
+                                            <strong>password</strong>:
+                                            <%= user.properties.localPassword %>
                     </p>
 
-                  <!--  <a href="/unlink/local" class="btn btn-default">Unlink</a> -->
-                <% } else { %>
-                  <!-- <a href="/connect/local" class="btn btn-default">Connect Local</a> -->
-                <% } %>
+                    <!--  <a href="/unlink/local" class="btn btn-default">Unlink</a> -->
+                    <% } else { %>
+                        <!-- <a href="/connect/local" class="btn btn-default">Connect Local</a> -->
+                        <% } %>
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#clear-local-storage").click(function () {
+            localStorage.removeItem("gridName");
+            localStorage.removeItem("grid");
+             $('.alert').show()
+        });
+    });
+
+</script>
