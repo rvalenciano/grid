@@ -2,6 +2,11 @@
 
 This is a JS app that allows the implementation of a GRID type data structure and combines it with a visualization of the COBIT framework. Useful for organizations that are implementing COBIT and the GQM+Strategies proposed in the book Aligning Organizations Through Measurement..
 
+Please check the basic usage guide with a lot of images in this wiki page:
+
+https://github.com/rvalenciano/grid/wiki/Basic-Usage
+
+
 ## Tech Stack
  * Database: neo4j
  * Backend: Express js
