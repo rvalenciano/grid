@@ -150,7 +150,7 @@ router.post('/', auth.isLoggedIn, function (req, res, next) {
 
       var response = {
         cobit: cobit,
-        grid: responseGrid,
+        grid: JSON.stringify(responseGrid),
         grids: JSON.stringify(loadedGrids),
         user: req.user,
         name: '',
