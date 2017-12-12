@@ -219,7 +219,7 @@ Grid.createGraphEdges = function (grid, cb) {
                 'MATCH (objective:Node),(strategy:Node)',
                 'WHERE objective.id = {source} AND strategy.id = {target}',
                 'MERGE (objective)-[rel:uses]->(strategy)',
-                'ON CREATE SET rel.id = {id}, rel.source = {source}, rel.target = {target}, rel.size = {size}, rel.color = {color}',
+                'ON CREATE SET rel.id = {id}, rel.source = {source}, rel.target = {target}, rel.size = {size}, rel.color = {color}, rel.type = {type}',
                 'RETURN rel'
             ].join('\n'),
             params: {
@@ -227,7 +227,8 @@ Grid.createGraphEdges = function (grid, cb) {
                 target: edge.target,
                 id: edge.id,
                 size: edge.size,
-                color: edge.color
+                color: edge.color,
+                type: edge.type
 
             }
         }
