@@ -80,6 +80,7 @@ router.post('/load', auth.isLoggedIn, function (req, res) {
   var selectedHeaderNode = req.body.gridsSelect;
   Grid.loadHeaderNodes(req.user._id, function (err, loadedGrids) {
     Grid.loadGrid(selectedHeaderNode, function (err, loadedGrid) {
+      console.log('grid.js loadedGrid', JSON.stringify(loadedGrid, null, 4));
       grid.nodes = loadedGrid.map(function (node) {
         if (node.node) {
           return node.node.properties;
@@ -87,6 +88,7 @@ router.post('/load', auth.isLoggedIn, function (req, res) {
 
       });
 
+      grid.nodes = grid.nodes.filter((node, index, self) => self.findIndex(t => t.id === node.id) === index);
       grid.edges = loadedGrid.filter(function (edge) {
         if (edge.r && edge.r.type == 'uses') {
           return true;
@@ -96,9 +98,11 @@ router.post('/load', auth.isLoggedIn, function (req, res) {
         }
       }).map(function (edge) {
         return edge.r.properties;
-      }).filter((elem, pos, arr) => {
-        return arr.indexOf(elem.id) == pos;
       });
+
+      grid.edges = grid.edges.filter((edge, index, self) => self.findIndex(t => t.id === edge.id) === index);
+
+
 
       console.log('PROCESSED GRID EDGES', grid.edges);
 

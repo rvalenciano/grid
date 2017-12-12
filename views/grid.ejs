@@ -82,18 +82,18 @@
                           <label for="goal-objective-select">Node Type</label>
                           <select class="form-control select select-primary select-block mbl" id="goal-objective-select" name="goal-objective-select"
                             required> 
-                        <option value="0">Objective</option>
-                        <option value="1">Strategy</option>
-                      </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="name">Node Name</label>
-                          <input type="text" placeholder="Name of:" id="name" name="name" class="form-control" required/>
-                        </div>
-                        <div class="form-group">
-                          <label for="description">Node Description</label>
-                          <textarea name="description" placeholder="Description of strategy or the goal:" name="description" class="form-control" id="description"></textarea>
-                        </div>
+                            <option value="0">Objective</option>
+                            <option value="1">Strategy</option>
+                          </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="name">Node Name</label>
+                            <input type="text" placeholder="Name of:" id="name" name="name" class="form-control" required/>
+                          </div>
+                          <div class="form-group">
+                            <label for="description">Node Description</label>
+                            <textarea name="description" placeholder="Description of strategy or the goal:" name="description" class="form-control" id="description"></textarea>
+                          </div>
 
                         <div class="form-group">
                           <input type="hidden" id="node-type" name="type" value="objective">
@@ -106,13 +106,28 @@
                           <label for="percentage">Strategy completition percentage (From 0% to 100%)</label>
                           <input type="number" name="percentage" min="1" max="100" id="percentage" class="form-control" />
                         </div>
-                        <!-- Strategies Select  -->
+                        <!-- Strategies Select, only show if it is an objective  -->
                         <div class="form-group">
                           <label for="strategies-select" id="strategies-select-label">Strategies</label>
                           <select id="strategies-select" name="strategies-select" multiple="multiple" class="form-control multiselect multiselect-info"
                             required> 
-      
-                     </select>
+                          </select> 
+                        </div>
+
+                        <!-- Strategies has many goals Select  -->
+                        <div class="form-group objectives-form-group">
+                          <label for="objectives-select" id="objectives-select-label">Objectives Belonging to This Strategy</label>
+                          <select id="objectives-select" name="objectives-select" multiple="multiple" class="form-control multiselect multiselect-info"
+                            required> 
+                          </select> 
+                        </div>
+
+                        <!-- Strategy can belong to an objective  -->
+                        <div class="form-group objectives-form-group">
+                          <label for="parent-objective-select" id="parent-objectives-select-label">Parent Objectives</label>
+                          <select id="parent-objective-select" name="parent-objective-select" multiple="multiple" class="form-control multiselect multiselect-info"
+                            required> 
+                          </select> 
                         </div>
                         <!-- Close  Strategies Select  -->
                         <!-- COBIT POLICIES Select  -->
@@ -121,41 +136,41 @@
                           <select class="form-control select select-primary select-block mbl" id="cobit-policies-select" name="cobit-policies-select"
                             required> 
                 
-            <optgroup label="Monitor, Evaluate and Assess">
-            <option value="MEA01 Monitor, Evaluate and Assess Performance and Conformance">MEA01 Monitor, Evaluate and Assess Performance and Conformance</option>
-            <option value="MEA02 Monitor, Evaluate and Assess the System of Internal Control">MEA02 Monitor, Evaluate and Assess the System of Internal Control</option>
-            <option value="MEA03 Monitor, Evaluate and Assess Compliance with External Requirements">MEA03 Monitor, Evaluate and Assess Compliance with External Requirements</option>
-            </optgroup>
-            <optgroup label="Process for Management of Enterprise IT">
-            <option value="Align, Plan and Organise">Align, Plan and Organise</option>
-            <option value="Build, Acquire and Implement">Build, Acquire and Implement</option>
-            <option value="Deliver, Service and Support">Deliver, Service and Support</option>
-            <option value="Monitor, Evaluate and Assess">Monitor, Evaluate and Assess</option>
-            </optgroup>
-            <optgroup label="Processes for Governance of Enterprise IT">
-            <option value="Evaluate, Direct and Monitor">Evaluate, Direct and Monitor</option>
-            <option value="Process for Management of Enterprise IT">Process for Management of Enterprise IT</option>
-            </optgroup>
-            <optgroup label="Evaluate, Direct and Monitor">
-            <option value="EDM01: Ensure Governance Framework Settling and Maintenance">EDM01: Ensure Governance Framework Settling and Maintenance</option>
-            <option value="EDM02: Ensure Benefits Delivery">EDM02: Ensure Benefits Delivery</option>
-            <option value="EDM03: Ensure Risk Optimization">EDM03: Ensure Risk Optimization</option>
-            <option value="EDM04: Ensure Resource Optimization">EDM04: Ensure Resource Optimization</option>
-            <option value="EDM05: Ensure Stakeholder Transparency">EDM05: Ensure Stakeholder Transparency</option>
-            </optgroup>
-            <optgroup label="Build, Acquire and Implement">
-            <option value="BAI01 Manage Programmes and Projects">BAI01 Manage Programmes and Projects</option>
-            <option value="BAI02 Manage Requirements Definition">BAI02 Manage Requirements Definition</option>
-            <option value="BAI03 Manage Solutions Identification and Build">BAI03 Manage Solutions Identification and Build</option>
-            <option value="BAI04 Manage Availability and Capacity">BAI04 Manage Availability and Capacity</option>
-            <option value="BAI05 Manage Organizational Change Enablement">BAI05 Manage Organizational Change Enablement</option>
-            <option value="BAI06 Manage Changes">BAI06 Manage Changes</option>
-            <option value="BAI07 Manage Chance Acceptance and Transitioning">BAI07 Manage Chance Acceptance and Transitioning</option>
-            <option value="BAI08 Manage Knowledge">BAI08 Manage Knowledge</option>
-            <option value="BAI09 Manage Assets">BAI09 Manage Assets</option>
-            <option value="BAI010 Manage Configuration">BAI010 Manage Configuration</option>
-            </optgroup>
-          </select>
+                            <optgroup label="Monitor, Evaluate and Assess">
+                              <option value="MEA01 Monitor, Evaluate and Assess Performance and Conformance">MEA01 Monitor, Evaluate and Assess Performance and Conformance</option>
+                              <option value="MEA02 Monitor, Evaluate and Assess the System of Internal Control">MEA02 Monitor, Evaluate and Assess the System of Internal Control</option>
+                              <option value="MEA03 Monitor, Evaluate and Assess Compliance with External Requirements">MEA03 Monitor, Evaluate and Assess Compliance with External Requirements</option>
+                            </optgroup>
+                            <optgroup label="Process for Management of Enterprise IT">
+                              <option value="Align, Plan and Organise">Align, Plan and Organise</option>
+                              <option value="Build, Acquire and Implement">Build, Acquire and Implement</option>
+                              <option value="Deliver, Service and Support">Deliver, Service and Support</option>
+                              <option value="Monitor, Evaluate and Assess">Monitor, Evaluate and Assess</option>
+                            </optgroup>
+                              <optgroup label="Processes for Governance of Enterprise IT">
+                              <option value="Evaluate, Direct and Monitor">Evaluate, Direct and Monitor</option>
+                              <option value="Process for Management of Enterprise IT">Process for Management of Enterprise IT</option>
+                            </optgroup>
+                            <optgroup label="Evaluate, Direct and Monitor">
+                              <option value="EDM01: Ensure Governance Framework Settling and Maintenance">EDM01: Ensure Governance Framework Settling and Maintenance</option>
+                              <option value="EDM02: Ensure Benefits Delivery">EDM02: Ensure Benefits Delivery</option>
+                              <option value="EDM03: Ensure Risk Optimization">EDM03: Ensure Risk Optimization</option>
+                              <option value="EDM04: Ensure Resource Optimization">EDM04: Ensure Resource Optimization</option>
+                              <option value="EDM05: Ensure Stakeholder Transparency">EDM05: Ensure Stakeholder Transparency</option>
+                            </optgroup>
+                            <optgroup label="Build, Acquire and Implement">
+                              <option value="BAI01 Manage Programmes and Projects">BAI01 Manage Programmes and Projects</option>
+                              <option value="BAI02 Manage Requirements Definition">BAI02 Manage Requirements Definition</option>
+                              <option value="BAI03 Manage Solutions Identification and Build">BAI03 Manage Solutions Identification and Build</option>
+                              <option value="BAI04 Manage Availability and Capacity">BAI04 Manage Availability and Capacity</option>
+                              <option value="BAI05 Manage Organizational Change Enablement">BAI05 Manage Organizational Change Enablement</option>
+                              <option value="BAI06 Manage Changes">BAI06 Manage Changes</option>
+                              <option value="BAI07 Manage Chance Acceptance and Transitioning">BAI07 Manage Chance Acceptance and Transitioning</option>
+                              <option value="BAI08 Manage Knowledge">BAI08 Manage Knowledge</option>
+                              <option value="BAI09 Manage Assets">BAI09 Manage Assets</option>
+                              <option value="BAI010 Manage Configuration">BAI010 Manage Configuration</option>
+                            </optgroup>
+                          </select>
                         </div>
                         <!-- Close  COBIT POLICIES Select  -->
                       </form>
@@ -312,4 +327,7 @@
 
           <script src="/js/sigma/sigma.min.js"></script>
           <script src="/js/sigma/plugins/sigma.plugins.dragNodes.min.js"></script>
+          <script src="/js/sigma/plugins/sigma.plugins.animate.min.js"></script>
+          <script src="/js/sigma/plugins/sigma.layout.forceAtlas2.min.js"></script>
+          
           <% include footer %>

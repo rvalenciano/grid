@@ -15,26 +15,6 @@
     var grid = <%- grid %>;
     var grids = <%- grids %>;
 
-    var atlasSettings = {
-      forceAtlas2Time: 5000,
-      // Force atalas2 configuration
-      forceAtlas2: {
-        linLogMode: false,
-        outboundAttractionDistribution: false,
-        adjustSizes: false,
-        edgeWeightInfluence: 0,
-        scalingRatio: 1,
-        strongGravityMode: false,
-        gravity: 1,
-        slowDown: 1,
-        barnesHutOptimize: true,
-        barnesHutTheta: 0.5,
-        startingIterations: 1,
-        iterationsPerRender: 1
-      },
-    };
-
-
     var i,
       s,
       N = 100,
@@ -64,7 +44,7 @@
 
     /*
      * We are gonna use local storage to store g and also all other variable
-    */
+     */
     localStorage.setItem('grid', JSON.stringify(g));
 
     // sigma.renderers.def = sigma.renderers.canvas
@@ -89,25 +69,60 @@
         edgeHoverExtremities: true,
         drawLabels: true,
         defaultEdgeType: 'tapered',
-
+        labelThreshold: 0
       },
 
 
     });
 
+    var atlasSettings = {
+      linLogMode: true,
+      outboundAttractionDistribution: false,
+      adjustSizes: false,
+      edgeWeightInfluence: 0,
+      scalingRatio: 1,
+      strongGravityMode: true,
+      gravity: 1,
+      barnesHutOptimize: false,
+      barnesHutTheta: 0.5,
+      slowDown: 1,
+      startingIterations: 5,
+      iterationsPerRender: 5,
+      worker: false
+    };
 
 
+    atlasObj = s.startForceAtlas2(atlasSettings);
+    $(window).blur(function () {
+      s.stopForceAtlas2();
+    });
+    $(window).on('focus', function () {
+      s.startForceAtlas2(atlasSettings);
+    });
 
     s.bind('doubleClickNode rightClickNode', function (e) {
       showDetailModal(e.data.node);
     });
 
 
+
+
     // Initialize the dragNodes plugin:
     var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
 
     dragListener.bind('startdrag', function (event) {
-
+      s.stopForceAtlas2();
+    });
+    dragListener.bind('dragend', function (event) {
+      nodes = atlasObj.supervisor.graph.nodes();
+      for (let j = 0, i = 0, l = atlasObj.supervisor.nodesByteArray.length; i < l; i += atlasObj.supervisor.ppn) {
+        if (nodes[j] === event.data.node) {
+          atlasObj.supervisor.nodesByteArray[i] = event.data.node.x;
+          atlasObj.supervisor.nodesByteArray[i + 1] = event.data.node.y;
+        }
+        j++;
+      }
+      s.startForceAtlas2(atlasSettings);
     });
     dragListener.bind('drag', function (event) {
 
@@ -115,9 +130,7 @@
     dragListener.bind('drop', function (event) {
 
     });
-    dragListener.bind('dragend', function (event) {
 
-    });
     /*
          $('#graph-container').mousedown(function (event) {
            switch (event.which) {
@@ -143,9 +156,6 @@
       ratio: c.ratio * c.settings('zoomingRatio')
     });
     s.refresh();
-    // s.startForceAtlas2(atlasSettings.forceAtlas2);
-    //updateContainerDimensions();
-    //window.dispatchEvent(new Event('resize'));
 
     // MODAL LOGIC
     $('#add-node').modal({
@@ -189,6 +199,7 @@
         $('#strategy-warning').hide();
         $('#strategies-select-label').show();
         $('#percentage-form-group').hide();
+        $('.objectives-form-group').hide();
         $('#cobit-policies-select-label').hide();
 
       } else if (this.value === '1') {
@@ -199,6 +210,7 @@
         $('#strategy-warning').show();
         $('#strategies-select-label').hide();
         $('#percentage-form-group').show();
+        $('.objectives-form-group').show();
         $('#cobit-policies-select-label').show();
       }
       $("select").select2({
@@ -271,8 +283,20 @@
       return element.nodeType == 'strategy';
     }
 
+    function isObjectiveNode(element) {
+      return element.nodeType == 'objective';
+    }
+
     function isTarget(element) {
       return element.name == 'strategies-select';
+    }
+
+    function isParentObjectiveForStrategy(element) {
+      return element.name == 'parent-objective-select';
+    }
+
+    function isChildObjectiveForStrategy(element) {
+      return element.name == 'objectives-select';
     }
 
     function deleteNode(nodeToDeleteName) {
@@ -296,6 +320,22 @@
         return g.edges;
       }
 
+    }
+
+    function createEdges(target_ids, source_id) {
+      target_ids.forEach(function (target_id) {
+        params = {
+          id: 'e_' + source_id + '_' + target_id,
+          source: source_id,
+          target: target_id,
+          size: 2,
+          color: '#ccc',
+          type: "arrow"
+        };
+        g.edges.push(params);
+        localStorage.setItem('grid', JSON.stringify(g));
+        s.graph.addEdge(params);
+      });
     }
 
     function showDetailModal(node) {
@@ -373,7 +413,9 @@
 
 
       s.refresh();
-      s.startForceAtlas2(atlasSettings.forceAtlas2);
+
+      s.startForceAtlas2(atlasSettings);
+      // s.startForceAtlas2(atlasSettings.forceAtlas2);
       //      return fruits.filter(function (el) {
       //        return el.toLowerCase().indexOf(query.toLowerCase()) > -1;
       //      });
@@ -433,14 +475,26 @@
         // if is a objective we add an edge between the selected strategies
         // and the new objective node
         var target_ids = form.filter(isTarget).map((x) => x.value);
-        target_ids.forEach(function (target_id) {
-          var source_id = genericId;
+        createEdges(target_ids, genericId);
+
+      } else if (form.find(isStrategy) != null) {
+        // if its a strategy node, we must add an edge between the strategy node
+        // and its child goals, and an edge between the parent node
+        // and the strategy
+        // first, the parent to this
+        var target_ids = form.filter(isChildObjectiveForStrategy).map((x) => x.value);
+        createEdges(target_ids, genericId);
+        //now we iterate for each parent node and we create the edge from that 
+        // parent node to this strategy node
+        var parent_ids = form.filter(isParentObjectiveForStrategy).map((x) => x.value);
+        parent_ids.forEach(function (target_id) {
           params = {
-            id: 'e_' + source_id + '_' + target_id,
-            source: source_id,
-            target: target_id,
+            id: 'e_' + genericId + '_' + target_id,
+            source: target_id,
+            target: genericId,
             size: 2,
-            color: '#ccc'
+            color: '#ccc',
+            type: "arrow"
           };
           g.edges.push(params);
           localStorage.setItem('grid', JSON.stringify(g));
@@ -450,7 +504,8 @@
       }
 
       s.refresh();
-      s.startForceAtlas2(atlasSettings.forceAtlas2);
+      s.startForceAtlas2(atlasSettings);
+      // s.startForceAtlas2(atlasSettings.forceAtlas2);
     });
 
     //GENERATE RANDOM GRID
@@ -568,12 +623,32 @@
         });
         strategies.forEach(function (element) {
           console.log(element);
-          var newOption = new Option(element.label, element.id, true, true);
+          var newOption = new Option(element.label, element.id, false, false);
           $("#strategies-select").append(newOption).trigger('change');
         });
+
+        // objectives for strategy logic
+
+        var objectives = g.nodes.filter(isObjectiveNode);
+        if (objectives != null) {
+          $('#objectives-select').html('').select2({
+            dropdownCssClass: 'dropdown-inverse'
+          });
+          $('#parent-objective-select').html('').select2({
+            dropdownCssClass: 'dropdown-inverse'
+          });
+          objectives.forEach(function (element) {
+            console.log(element);
+            var newOption1 = new Option(element.label, element.id, false, false);
+            var newOption2 = new Option(element.label, element.id, false, false);
+            $("#objectives-select").append(newOption1).trigger('change');
+            $("#parent-objective-select").append(newOption2).trigger('change');
+          });
+        }
         // Select the option with a value of 'Objective'
         //  $('#goal-objective-select').val('0').trigger('change');
         $('#goal-objective-select').val('0').trigger('change.select2');
+        // $('#goal-objective-select').val('1').trigger('change.select2');
 
         $('#strategies-select').parent().show();
         $('#cobit-policies-select').parent().hide();
@@ -582,6 +657,7 @@
         $('#strategy-warning').hide();
         $('#strategies-select-label').show();
         $('#percentage-form-group').hide();
+        $('.objectives-form-group').hide();
         $('#cobit-policies-select-label').hide();
         $("select").select2({
           dropdownCssClass: 'dropdown-inverse'

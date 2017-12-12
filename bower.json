@@ -9,6 +9,7 @@
   "dependencies": {
     "flat-ui": "^2.3.0",
     "bootstrap": "^3.3.7",
-    "d3": "v3.5.17"
+    "d3": "v3.5.17",
+    "dagre": "^0.7.4"
   }
 }
